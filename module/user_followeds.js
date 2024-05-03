@@ -3,11 +3,9 @@
 module.exports = (query, request) => {
   const data = {
     userId: query.uid,
-    time: '0',
-    limit: query.limit || 30,
-    offset: query.offset || 0,
-    getcounts: 'true',
-  }
+    time: query.lasttime || -1,
+    limit: query.limit || 30
+  };
   return request(
     'POST',
     `https://music.163.com/eapi/user/getfolloweds/${query.uid}`,
@@ -15,10 +13,8 @@ module.exports = (query, request) => {
     {
       crypto: 'eapi',
       cookie: query.cookie,
-      ua: query.ua || '',
       proxy: query.proxy,
-      url: '/api/user/getfolloweds',
-      realIP: query.realIP,
-    },
-  )
-}
+      url: '/api/user/getfolloweds'
+    }
+  );
+};
