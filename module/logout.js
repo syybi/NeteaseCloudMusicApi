@@ -2,7 +2,16 @@
 
 module.exports = (query, request) => {
   return request(
-    'POST', `https://music.163.com/weapi/logout`, {},
-    {crypto: 'weapi', ua: 'pc', cookie: query.cookie, proxy: query.proxy}
+    'POST',
+    `https://music.163.com/weapi/logout`,
+    {},
+    {
+      crypto: 'weapi',
+      uaType: 'pc',
+      cookie: query.cookie,
+      ua: query.ua || '',
+      proxy: query.proxy,
+      realIP: query.realIP,
+    },
   )
 }

@@ -2,13 +2,16 @@
 
 module.exports = (query, request) => {
   return request(
-    'POST', `http://interface3.music.163.com/eapi/search/defaultkeyword/get`, {},
+    'POST',
+    `https://interface3.music.163.com/eapi/search/defaultkeyword/get`,
+    {},
     {
       crypto: 'eapi',
       cookie: query.cookie,
+      ua: query.ua || '',
       proxy: query.proxy,
-      url: '/api/search/defaultkeyword/get'
-    }
+      url: '/api/search/defaultkeyword/get',
+      realIP: query.realIP,
+    },
   )
 }
-
