@@ -9,10 +9,10 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Backup Repo
+      - name: Checkout NeteaseCloudMusicApi Repo
         uses: actions/checkout@v4
         with:
-          repository: syybi/NeteaseCloudMusicApiBackup
+          repository: syybi/NeteaseCloudMusicApi
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
 
