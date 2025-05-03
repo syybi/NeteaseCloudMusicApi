@@ -1,0 +1,43 @@
+name: Sync from NPM
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # 每月1日 00:00 UTC
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Backup Repo
+        uses: actions/checkout@v4
+        with:
+          repository: syybi/NeteaseCloudMusicApiBackup
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Get NPM Package Info
+        id: npm
+        run: |
+          LATEST_VERSION=$(npm view NeteaseCloudMusicApi version)
+          echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download and Extract Package
+        run: |
+          # 下载并解压到当前目录
+          curl -L https://registry.npmjs.org/NeteaseCloudMusicApi/-/NeteaseCloudMusicApi-${{ steps.npm.outputs.version }}.tgz -o package.tgz
+          tar -xzf package.tgz --strip-components=1
+          rm package.tgz
+
+      - name: Commit Changes
+        run: |
+          git config --global user.name "simon"
+          git config --global user.email "sim@vip.gbxh.cf"
+          git add .
+          git commit -m "chore: sync from npm@${{ steps.npm.outputs.version }}" || echo "No changes to commit"
+          git push origin main
