@@ -16,6 +16,18 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
 
+      - name: Delete Unwanted Files and Directories
+        run: |
+          # 删除指定的目录和文件
+          rm -rf data module plugins public util
+          rm -f LICENSE README.MD app.js generateConfig.js interface.d.ts main.js package.json server.js
+          # 提交删除的文件
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add -A
+          git commit -m "chore: remove unnecessary files and directories" || echo "No changes to commit"
+          git push origin main
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -34,10 +46,9 @@ jobs:
           tar -xzf package.tgz --strip-components=1
           rm package.tgz
 
-      - name: Commit Changes
+      - name: Commit New Package Files
         run: |
-          git config --global user.name "simon"
-          git config --global user.email "sim@vip.gbxh.cf"
+          # 提交新下载的文件
           git add .
           git commit -m "chore: sync from npm@${{ steps.npm.outputs.version }}" || echo "No changes to commit"
           git push origin main
